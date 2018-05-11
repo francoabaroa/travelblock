@@ -1,14 +1,14 @@
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import React, { Component } from 'react';
 import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
-import TravelochainCityFactoryContract from '../build/contracts/TravelochainCityFactory.json'
+import TravelblockCityFactoryContract from '../build/contracts/TravelblockCityFactory.json'
 import TMapContainer from './TMapContainer.js';
 import TToolbar from './TToolbar.js';
 import Web3 from 'web3'
 import getWeb3 from '../utils/getWeb3'
 
 import '../styles/App.css';
-import TravelochainConstants from '../constants/TravelochainConstants.js'
+import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 const contract = require('truffle-contract');
 
@@ -48,7 +48,7 @@ class App extends Component {
       this.instantiateContract();
     })
     .catch((error) => {
-      console.log(TravelochainConstants.WEB3_ERROR, error, arguments);
+      console.log(TravelblockConstants.WEB3_ERROR, error, arguments);
     })
   }
 
@@ -58,31 +58,37 @@ class App extends Component {
      * Normally these functions would be called in the context of a
      * state management library, but for convenience I've placed them here.
      */
-    let travelochainCityFactoryInstance;
-    const travelochainStorage = contract(TravelochainCityFactoryContract);
-    travelochainStorage.setProvider(this.state.web3.currentProvider);
+    let travelblockCityFactoryInstance;
+    const travelblockStorage = contract(TravelblockCityFactoryContract);
+    travelblockStorage.setProvider(this.state.web3.currentProvider);
     this.state.web3.eth.getAccounts((error, accounts) => {
-      travelochainStorage.deployed().then((instance) => {
-        travelochainCityFactoryInstance = instance;
-        return travelochainCityFactoryInstance.getCitiesByOwner(accounts[0]);
+      travelblockStorage.deployed().then((instance) => {
+        travelblockCityFactoryInstance = instance;
+        return travelblockCityFactoryInstance.getCitiesByOwner(accounts[0]);
       }).then((result) => {
-        for (let i = 0; i < result.length; i++) {
-          travelochainCityFactoryInstance.cities(result[i].c[0]).then((result) => {
-            let currentCity = [{
-              name: result[0],
-              lat: result[1],
-              lng: result[2],
-              country: result[3],
-              notes: result[4],
-              startDate: result[5].c[0],
-              endDate: result[6].c[0],
-            }];
-
-            return this.setState({
-              cities: this.state.cities.concat(currentCity),
-              contractInstance: travelochainCityFactoryInstance,
-              currentAccount: accounts[0],
+        if (result.length > 0) {
+          for (let i = 0; i < result.length; i++) {
+            travelblockCityFactoryInstance.cities(result[i].c[0]).then((result) => {
+              let currentCity = [{
+                name: result[0],
+                lat: result[1],
+                lng: result[2],
+                country: result[3],
+                notes: result[4],
+                startDate: result[5].c[0],
+                endDate: result[6].c[0],
+              }];
+              return this.setState({
+                cities: this.state.cities.concat(currentCity),
+                contractInstance: travelblockCityFactoryInstance,
+                currentAccount: accounts[0],
+              });
             });
+          }
+        } else {
+          return this.setState({
+            contractInstance: travelblockCityFactoryInstance,
+            currentAccount: accounts[0],
           });
         }
       })
@@ -90,7 +96,7 @@ class App extends Component {
   }
 
   saveCityVisitedToContract = () => {
-    let travelochainCityFactoryInstance;
+    let travelblockCityFactoryInstance;
     let name = this.state.currentCity.name;
     let lat = this.state.currentCity.location.lat;
     let lng = this.state.currentCity.location.lng;
@@ -117,22 +123,26 @@ class App extends Component {
 
   cleanUpGeocodeResult(result) {
     let country, name;
-    let lat = result.geometry.bounds.f;
-    let lng = result.geometry.bounds.b;
-    lat = (lat.b + lat.f)/TravelochainConstants.AVERAGE;
-    lng = (lng.b + lng.f)/TravelochainConstants.AVERAGE;
+    if (result.geometry.hasOwnProperty('bounds')) {
+      let lat = result.geometry.bounds.f;
+      let lng = result.geometry.bounds.b;
+      lat = (lat.b + lat.f)/TravelblockConstants.AVERAGE;
+      lng = (lng.b + lng.f)/TravelblockConstants.AVERAGE;
 
-    for (let i = 0; i < result.address_components.length; i++) {
-      if (result.address_components[i].types.includes(TravelochainConstants.COUNTRY)) {
-        country = result.address_components[i].long_name;
+      for (let i = 0; i < result.address_components.length; i++) {
+        if (result.address_components[i].types.includes(TravelblockConstants.COUNTRY)) {
+          country = result.address_components[i].long_name;
+        }
+        if (result.address_components[i].types.includes(TravelblockConstants.LOCALITY)) {
+          name = result.address_components[i].long_name;
+        }
       }
-      if (result.address_components[i].types.includes(TravelochainConstants.LOCALITY)) {
-        name = result.address_components[i].long_name;
-      }
+
+      this.storeCityInformation(lat, lng, name, country);
+      return getLatLng(result);
+    } else {
+      // TODO: show error msg to user
     }
-
-    this.storeCityInformation(lat, lng, name, country);
-    return getLatLng(result);
   }
 
   handleCityChange = (city) => {
@@ -199,7 +209,7 @@ class App extends Component {
   saveCurrentCityEndDate = (_, date) => {
     this.setState({
       currentCityEndDate: new Date(
-        date.toDateString() + TravelochainConstants.DATE_STRING
+        date.toDateString() + TravelblockConstants.DATE_STRING
       ).toISOString().substring(0, 10),
       unformattedCityEndDate: date.toDateString(),
     });
@@ -214,7 +224,7 @@ class App extends Component {
   saveCurrentCityStartDate = (_, date) => {
     this.setState({
       currentCityStartDate: new Date(
-        date.toDateString() + TravelochainConstants.DATE_STRING
+        date.toDateString() + TravelblockConstants.DATE_STRING
       ).toISOString().substring(0, 10),
       unformattedCityStartDate: date.toDateString(),
     });
@@ -238,7 +248,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className={TravelochainConstants.APP}>
+      <div className={TravelblockConstants.APP}>
         <header>
           <TToolbar
             addCityDetailsDialogOpen={this.state.addCityDetailsDialogOpen}
@@ -261,9 +271,9 @@ class App extends Component {
         </header>
         <br/>
         {
-          this.state.toolbarViewSelected === TravelochainConstants.TOOLBAR_MAP_VIEW
-          ? <TMapContainer className={TravelochainConstants.MAP} cities={this.state.cities} />
-          : <div> {TravelochainConstants.AVAILABLE_SOON} </div>
+          this.state.toolbarViewSelected === TravelblockConstants.TOOLBAR_MAP_VIEW
+          ? <TMapContainer className={TravelblockConstants.MAP} cities={this.state.cities} />
+          : <div> {TravelblockConstants.AVAILABLE_SOON} </div>
         }
       </div>
     );

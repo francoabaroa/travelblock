@@ -3,7 +3,7 @@ pragma solidity ^0.4.19;
 import "../base/ownership/Ownable.sol";
 import "../base/math/SafeMath.sol";
 
-contract TravelochainCityFactory is Ownable {
+contract TravelblockCityFactory is Ownable {
 
   using SafeMath for uint256;
   using SafeMath32 for uint32;

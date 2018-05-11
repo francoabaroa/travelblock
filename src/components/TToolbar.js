@@ -1,7 +1,7 @@
 import PlacesAutocomplete from 'react-places-autocomplete'
 import React, { Component } from 'react'
 
-import TravelochainConstants from '../constants/TravelochainConstants.js'
+import TravelblockConstants from '../constants/TravelblockConstants.js'
 import '../styles/App.css';
 import { classnames } from '../utils/utils'
 
@@ -22,7 +22,7 @@ class TToolbar extends Component {
   getCityDialog = () => {
     const dialogActions = [
       <FlatButton
-        label={TravelochainConstants.CANCEL}
+        label={TravelblockConstants.CANCEL}
         secondary={true}
         keyboardFocused={true}
         onClick={this.props.handleCityDialogClose}
@@ -31,7 +31,7 @@ class TToolbar extends Component {
 
     return (
       <Dialog
-        title={TravelochainConstants.ADD_A_CITY}
+        title={TravelblockConstants.ADD_A_CITY}
         actions={dialogActions}
         modal={false}
         open={this.props.addCityDialogOpen}
@@ -40,7 +40,7 @@ class TToolbar extends Component {
         value={this.props.city}
         onChange={this.props.handleCityChange}
         onSelect={this.props.handleCitySelect}
-        searchOptions={TravelochainConstants.SEARCH_OPTIONS}
+        searchOptions={TravelblockConstants.SEARCH_OPTIONS}
       >
       {({ getInputProps, suggestions, getSuggestionItemProps }) => {
       return (
@@ -48,7 +48,7 @@ class TToolbar extends Component {
           <div className="Search__search-input-container">
             <input
               {...getInputProps({
-                placeholder: TravelochainConstants.SEARCH,
+                placeholder: TravelblockConstants.SEARCH,
                 className: 'Search__search-input',
               })}
             />
@@ -56,7 +56,7 @@ class TToolbar extends Component {
               <button
                 className="Search__clear-button"
                 onClick={this.props.handleCloseClick}>
-                {TravelochainConstants.X}
+                {TravelblockConstants.X}
               </button>
             )}
           </div>
@@ -72,7 +72,7 @@ class TToolbar extends Component {
                     {...getSuggestionItemProps(suggestion, { className })}>
                     <strong>
                       {suggestion.formattedSuggestion.mainText}
-                    </strong>{TravelochainConstants.STRING_SPACE}
+                    </strong>{TravelblockConstants.STRING_SPACE}
                     <small>
                       {suggestion.formattedSuggestion.secondaryText}
                     </small>
@@ -93,13 +93,13 @@ class TToolbar extends Component {
   getCityDetailsDialog = () => {
     let dialogActions = [
       <FlatButton
-        label={TravelochainConstants.CANCEL}
+        label={TravelblockConstants.CANCEL}
         secondary={true}
         keyboardFocused={true}
         onClick={this.props.handleCityDialogClose}
       />,
       <FlatButton
-        label={TravelochainConstants.SAVE}
+        label={TravelblockConstants.SAVE}
         primary={true}
         keyboardFocused={true}
         onClick={this.props.handleCityConfirmationDialogOpen}
@@ -108,25 +108,25 @@ class TToolbar extends Component {
 
     return (
       <Dialog
-        title={this.props.city + TravelochainConstants.TRIP_INFORMATION}
+        title={this.props.city + TravelblockConstants.TRIP_INFORMATION}
         actions={dialogActions}
         modal={false}
         open={this.props.addCityDetailsDialogOpen}
         onRequestClose={this.props.handleCityDialogClose}>
         <DatePicker
           autoOk={true}
-          hintText={TravelochainConstants.START_DATE}
-          mode={TravelochainConstants.LANDSCAPE}
+          hintText={TravelblockConstants.START_DATE}
+          mode={TravelblockConstants.LANDSCAPE}
           onChange={this.props.saveCurrentCityStartDate} />
         <DatePicker
           autoOk={true}
-          hintText={TravelochainConstants.END_DATE}
-          mode={TravelochainConstants.LANDSCAPE}
+          hintText={TravelblockConstants.END_DATE}
+          mode={TravelblockConstants.LANDSCAPE}
           onChange={this.props.saveCurrentCityEndDate}/>
         <TextField
           onChange={this.props.saveCurrentCityNote}
-          hintText={TravelochainConstants.NOTES_HINT_TEXT}
-          floatingLabelText={TravelochainConstants.NOTES_LABEL_TEXT + this.props.city}
+          hintText={TravelblockConstants.NOTES_HINT_TEXT}
+          floatingLabelText={TravelblockConstants.NOTES_LABEL_TEXT + this.props.city}
           multiLine={true}
           rows={2} />
         <br />
@@ -137,13 +137,13 @@ class TToolbar extends Component {
   getCitySaveConfirmationDialog = () => {
     let dialogActions = [
       <FlatButton
-        label={TravelochainConstants.CANCEL}
+        label={TravelblockConstants.CANCEL}
         secondary={true}
         keyboardFocused={true}
         onClick={this.props.handleCityDialogClose}
       />,
       <FlatButton
-        label={TravelochainConstants.SAVE}
+        label={TravelblockConstants.SAVE}
         primary={true}
         keyboardFocused={true}
         onClick={this.props.saveCityVisitedToContract}
@@ -152,14 +152,14 @@ class TToolbar extends Component {
 
     return (
       <Dialog
-        title={this.props.city + TravelochainConstants.TRIP}
+        title={this.props.city + TravelblockConstants.TRIP}
         actions={dialogActions}
         modal={false}
         open={this.props.showCityConfirmationDialog}
         onRequestClose={this.props.handleCityDialogClose}>
-        <div> {TravelochainConstants.SAVE_DIALOG_MESSAGE} </div>
+        <div> {TravelblockConstants.SAVE_DIALOG_MESSAGE} </div>
         <br />
-        <div> {TravelochainConstants.GAS_FEE_MESSAGE} </div>
+        <div> {TravelblockConstants.GAS_FEE_MESSAGE} </div>
       </Dialog>
     );
   }
@@ -171,13 +171,13 @@ class TToolbar extends Component {
         onChange={this.props.handleToolbarSelectionChange}>
         <MenuItem
           value={1}
-          primaryText={TravelochainConstants.MAP_VIEW} />
+          primaryText={TravelblockConstants.MAP_VIEW} />
         <MenuItem
           value={2}
-          primaryText={TravelochainConstants.LIST_VIEW} />
+          primaryText={TravelblockConstants.LIST_VIEW} />
         <MenuItem
           value={3}
-          primaryText={TravelochainConstants.STATS_VIEW} />
+          primaryText={TravelblockConstants.STATS_VIEW} />
       </DropDownMenu>
     );
   }
@@ -185,9 +185,9 @@ class TToolbar extends Component {
   getToolbarTitle = () => {
     return (
       <ToolbarTitle
-        style={{color: TravelochainConstants.WHITE}}
-        className={TravelochainConstants.APP_TITLE}
-        text={TravelochainConstants.NAME}
+        style={{color: TravelblockConstants.WHITE}}
+        className={TravelblockConstants.APP_TITLE}
+        text={TravelblockConstants.NAME}
       />
     );
   }
@@ -211,7 +211,7 @@ class TToolbar extends Component {
           <ToolbarSeparator />
           <div>
             <RaisedButton
-              label={TravelochainConstants.ADD_A_CITY}
+              label={TravelblockConstants.ADD_A_CITY}
               onClick={this.props.handleCityDialogOpen} />
               {dialog}
           </div>

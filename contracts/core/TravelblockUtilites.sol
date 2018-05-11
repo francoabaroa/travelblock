@@ -1,8 +1,8 @@
 pragma solidity ^0.4.19;
 
-import "./TravelochainCityFactory.sol";
+import "./TravelblockCityFactory.sol";
 
-contract TravelochainUtilites is TravelochainCityFactory {
+contract TravelblockUtilites is TravelblockCityFactory {
 
   modifier onlyOwnerOf(uint _cityId) {
     require(msg.sender == cityToOwner[_cityId]);

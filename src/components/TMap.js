@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import React, { Component } from 'react';
 
-import TravelochainConstants from '../constants/TravelochainConstants.js'
+import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 class TMap extends Component {
   constructor(props) {
@@ -19,24 +19,26 @@ class TMap extends Component {
   }
 
   cleanUpDate(date) {
-    let cleanDate = [];
-    let stringDate = date.toString();
-    for (let index = 0; index < stringDate.length; index++) {
-      if (index <= 3) {
-        cleanDate.push(stringDate[index]);
-        if (index === 3) {
-          cleanDate.push('-');
+    if (date) {
+      let cleanDate = [];
+      let stringDate = date.toString();
+      for (let index = 0; index < stringDate.length; index++) {
+        if (index <= 3) {
+          cleanDate.push(stringDate[index]);
+          if (index === 3) {
+            cleanDate.push('-');
+          }
+        } else if (index > 3 && index <= 5) {
+          cleanDate.push(stringDate[index]);
+          if (index === 5) {
+            cleanDate.push('-');
+          }
+        } else if (index > 5 && index <= 7) {
+          cleanDate.push(stringDate[index]);
         }
-      } else if (index > 3 && index <= 5) {
-        cleanDate.push(stringDate[index]);
-        if (index === 5) {
-          cleanDate.push('-');
-        }
-      } else if (index > 5 && index <= 7) {
-        cleanDate.push(stringDate[index]);
       }
+      return cleanDate.join('');
     }
-    return cleanDate.join('');
   }
 
   loadMap() {
@@ -47,11 +49,11 @@ class TMap extends Component {
       const node = ReactDOM.findDOMNode(mapRef);
       const mapConfig = Object.assign({}, {
         center: {
-          lat: TravelochainConstants.MAP_LAT,
-          lng: TravelochainConstants.MAP_LNG
+          lat: TravelblockConstants.MAP_LAT,
+          lng: TravelblockConstants.MAP_LNG
         },
-        zoom: TravelochainConstants.MAP_ZOOM,
-        mapTypeId: TravelochainConstants.MAP_TYPE_ID
+        zoom: TravelblockConstants.MAP_ZOOM,
+        mapTypeId: TravelblockConstants.MAP_TYPE_ID
       });
 
       this.map = new maps.Map(node, mapConfig);
@@ -83,13 +85,13 @@ class TMap extends Component {
 
   render() {
     const style = {
-      height: TravelochainConstants.MAP_HEIGHT,
-      width: TravelochainConstants.MAP_WIDTH,
+      height: TravelblockConstants.MAP_HEIGHT,
+      width: TravelblockConstants.MAP_WIDTH,
     }
 
     return (
       <div ref="map" style={style}>
-        {TravelochainConstants.LOADING_MAP}
+        {TravelblockConstants.LOADING_MAP}
       </div>
     );
   }

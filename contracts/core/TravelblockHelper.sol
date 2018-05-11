@@ -1,8 +1,8 @@
 pragma solidity ^0.4.19;
 
-import "./TravelochainUtilites.sol";
+import "./TravelblockUtilites.sol";
 
-contract TravelochainHelper is TravelochainUtilites {
+contract TravelblockHelper is TravelblockUtilites {
 
   uint upgradeFee = 0.001 ether;
 

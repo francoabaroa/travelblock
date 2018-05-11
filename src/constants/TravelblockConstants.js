@@ -1,4 +1,4 @@
-const TravelochainConstants = {
+const TravelblockConstants = {
   ADD_A_CITY: 'Add City',
   ADMIN_LVL_1: 'administrative_area_level_1',
   APP: 'App',
@@ -26,7 +26,7 @@ const TravelochainConstants = {
   MAP_VIEW: 'Map View',
   MAP_WIDTH: '85vw',
   MAP_ZOOM: 2,
-  NAME: 'travelochain',
+  NAME: 'travelblock',
   NOTES_HINT_TEXT: 'Special Memories, Experiences, Etc',
   NOTES_LABEL_TEXT: 'Notes about your trip to ',
   POWERED_BY_GOOGLE: './images/powered_by_google_default.png',
@@ -49,4 +49,4 @@ const TravelochainConstants = {
   X: 'x',
 };
 
-module.exports = TravelochainConstants;
+module.exports = TravelblockConstants;

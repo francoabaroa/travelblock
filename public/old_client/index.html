@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Travelochain front-end</title>
+    <title>Travelblock front-end</title>
     <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
     <script language="javascript" type="text/javascript" src="../packages/lib/INSERT_ABI_JS_LIBRARY_HERE.js"></script>
@@ -12,13 +12,13 @@
     <div id="cities"></div>
 
     <script>
-      var travelochain;
+      var travelblock;
       var userAccount;
 
       function startApp() {
-        var travelochainAddress = "TRAVELOCHAIN_CONTRACT_ADDRESS";
-        // travelochainABI defined where??
-        travelochain = new web3js.eth.Contract(travelochainABI, travelochainAddress);
+        var travelblockAddress = "Travelblock_CONTRACT_ADDRESS";
+        // travelblockABI defined where??
+        travelblock = new web3js.eth.Contract(travelblockABI, travelblockAddress);
 
         var accountInterval = setInterval(function() {
           if (web3.eth.accounts[0] !== userAccount) {
@@ -28,7 +28,7 @@
           }
         }, 100);
 
-        travelochain.events.Transfer({ filter: { _to: userAccount } })
+        travelblock.events.Transfer({ filter: { _to: userAccount } })
         .on("data", function(event) {
           let data = event.returnValues;
           getCitiesByOwner(userAccount).then(displayCities);
@@ -54,11 +54,11 @@
       }
 
       function saveCityVisited(name, lat, lng, state, country) {
-        $("#txStatus").text("Engraving the city you visited into your travelochain journal. This may take a while...");
-        return travelochain.methods.saveCityVisited(name, lat, lng, state, country)
+        $("#txStatus").text("Engraving the city you visited into your travelblock journal. This may take a while...");
+        return travelblock.methods.saveCityVisited(name, lat, lng, state, country)
         .send({ from: userAccount })
         .on("receipt", function(receipt) {
-          $("#txStatus").text("Successfully engraved " + name + " into your travelochain!");
+          $("#txStatus").text("Successfully engraved " + name + " into your travelblock!");
           getCitiesByOwner(userAccount).then(displayCities);
         })
         .on("error", function(error) {
@@ -68,16 +68,16 @@
       }
 
       function getCityDetails(id) {
-        return travelochain.methods.cities(id).call();
+        return travelblock.methods.cities(id).call();
       }
 
       // Needed?
       function cityToOwner(id) {
-        return travelochain.methods.cityToOwner(id).call();
+        return travelblock.methods.cityToOwner(id).call();
       }
 
       function getCitiesByOwner(owner) {
-        return travelochain.methods.getCitiesByOwner(owner).call();
+        return travelblock.methods.getCitiesByOwner(owner).call();
       }
 
       window.addEventListener('load', function() {

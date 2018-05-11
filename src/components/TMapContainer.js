@@ -2,7 +2,7 @@ import { GoogleApiWrapper } from 'google-maps-react'
 import React, { Component } from 'react';
 import TMap from './TMap.js'
 
-import TravelochainConstants from '../constants/TravelochainConstants.js'
+import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 class TMapContainer extends Component {
   constructor(props) {
@@ -14,8 +14,8 @@ class TMapContainer extends Component {
       <div
         className="TMapContainer"
         style={{
-          display: TravelochainConstants.FLEX,
-          justifyContent: TravelochainConstants.CENTER
+          display: TravelblockConstants.FLEX,
+          justifyContent: TravelblockConstants.CENTER
         }}>
         <TMap google={this.props.google} cities={this.props.cities} />
       </div>

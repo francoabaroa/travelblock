@@ -139,9 +139,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.17;\n\ncontract ERC721 {\n  event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);\n  event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);\n\n  function balanceOf(address _owner) public view returns (uint256 _balance);\n  function ownerOf(uint256 _tokenId) public view returns (address _owner);\n  function transfer(address _to, uint256 _tokenId) public;\n  function approve(address _to, uint256 _tokenId) public;\n  function takeOwnership(uint256 _tokenId) public;\n}\n",
-  "sourcePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelochain/contracts/base/token/ERC721.sol",
+  "sourcePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelblock/contracts/base/token/ERC721.sol",
   "ast": {
-    "absolutePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelochain/contracts/base/token/ERC721.sol",
+    "absolutePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelblock/contracts/base/token/ERC721.sol",
     "exportedSymbols": {
       "ERC721": [
         514
@@ -760,7 +760,7 @@
     "src": "0:534:4"
   },
   "legacyAST": {
-    "absolutePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelochain/contracts/base/token/ERC721.sol",
+    "absolutePath": "/Users/francoabaroa/Desktop/Hack Reactor/Repos/personalSprints/travelblock/contracts/base/token/ERC721.sol",
     "exportedSymbols": {
       "ERC721": [
         514
@@ -1384,5 +1384,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-05-11T00:07:23.658Z"
+  "updatedAt": "2018-05-11T01:50:13.523Z"
 }

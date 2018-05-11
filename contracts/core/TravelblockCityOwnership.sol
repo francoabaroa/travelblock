@@ -1,6 +1,6 @@
 pragma solidity ^0.4.19;
 
-import "./TravelochainHelper.sol";
+import "./TravelblockHelper.sol";
 import "../base/token/ERC721.sol";
 import "../base/math/SafeMath.sol";
 
@@ -9,7 +9,7 @@ import "../base/math/SafeMath.sol";
 /// @notice For now, this contract can check balance of an owner, the owner of a city, and transfer ownership
 /// @dev Compliant with OpenZeppelin's implementation of the ERC721 spec draft
 
-contract TravelochainCityOwnership is TravelochainHelper, ERC721 {
+contract TravelblockCityOwnership is TravelblockHelper, ERC721 {
 
   using SafeMath for uint256;
 
