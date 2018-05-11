@@ -1,0 +1,65 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 220px;
+}
+
+.App-header {
+  background-color: #222;
+  color: white;
+  height: 30px;
+  padding: 20px;
+}
+
+.App-title {
+  padding-left: 20px;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.Search__search-input-container {
+  position: relative;
+}
+
+.Search__search-input,
+.Search__search-input:focus,
+.Search__search-input:active {
+  border: honeydew;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+  display: block;
+  font-size: 16px;
+  outline: none;
+  padding: 16px;
+  width: 96%;
+}
+
+.Search__clear-button,
+.Search__clear-button:active,
+.Search__clear-button:focus {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: large;
+  font-weight: 600;
+  outline: none;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.Search__dropdown-footer-image {
+  display: inline-block;
+  width: 150px;
+}
