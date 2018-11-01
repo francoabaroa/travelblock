@@ -20,5 +20,5 @@ class TMapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyAbQUAMpD686hG6bouitFtOQA7lCzPOfE8',
+  apiKey: 'API_KEY',
 })(TMapContainer)
