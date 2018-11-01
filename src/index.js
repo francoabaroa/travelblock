@@ -6,7 +6,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './styles/index.css';
-import registerServiceWorker from './workers/registerServiceWorker';
 
 const AppUI = () => (
   <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
@@ -15,4 +14,3 @@ const AppUI = () => (
 );
 
 ReactDOM.render(<AppUI />, document.getElementById('root'));
-// registerServiceWorker();

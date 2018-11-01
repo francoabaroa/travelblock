@@ -15,10 +15,6 @@ import TextField from 'material-ui/TextField';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar'
 
 class TToolbar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   getCityDialog = () => {
     const dialogActions = [
       <FlatButton
@@ -124,11 +120,15 @@ class TToolbar extends Component {
           mode={TravelblockConstants.LANDSCAPE}
           onChange={this.props.saveCurrentCityEndDate}/>
         <TextField
-          onChange={this.props.saveCurrentCityNote}
-          hintText={TravelblockConstants.NOTES_HINT_TEXT}
-          floatingLabelText={TravelblockConstants.NOTES_LABEL_TEXT + this.props.city}
-          multiLine={true}
-          rows={2} />
+          onChange={this.props.saveCurrentCityMemories}
+          hintText={''}
+          floatingLabelText={'Best memories in ' + this.props.city}
+          multiLine={true} />
+        <TextField
+        onChange={this.props.saveCurrentCityFavFood}
+        hintText={''}
+        floatingLabelText={'Favorite food in ' + this.props.city}
+        multiLine={true} />
         <br />
       </Dialog>
     );

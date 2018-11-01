@@ -4,9 +4,6 @@ import React, { Component } from 'react';
 import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 class TMap extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     this.loadMap();

@@ -5,10 +5,6 @@ import TMap from './TMap.js'
 import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 class TMapContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div
@@ -24,5 +20,5 @@ class TMapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'SECRET_KEY',
+  apiKey: 'AIzaSyAbQUAMpD686hG6bouitFtOQA7lCzPOfE8',
 })(TMapContainer)

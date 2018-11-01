@@ -1,19 +1,22 @@
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import React, { Component } from 'react';
-import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import TravelblockCityFactoryContract from '../build/contracts/TravelblockCityFactory.json'
 import TMapContainer from './TMapContainer.js';
 import TToolbar from './TToolbar.js';
-import Web3 from 'web3'
 import getWeb3 from '../utils/getWeb3'
 
 import '../styles/App.css';
 import TravelblockConstants from '../constants/TravelblockConstants.js'
 
 const contract = require('truffle-contract');
+const secp256k1 = require('secp256k1');
+const keccak = require('keccak');
+const randomBytes = require('randombytes');
 
-/*global web3:true*/
-/*eslint no-undef: "error"*/
+const keccak256 = require('js-sha3').keccak256;
+
+const elliptic = require('elliptic');
+const _secp256k1 = new (elliptic.ec)('secp256k1');
 
 class App extends Component {
   constructor(props) {
@@ -28,6 +31,8 @@ class App extends Component {
       currentCity: {},
       /* YYYY-MM-DD Format */
       currentCityEndDate: '',
+      currentCityFavFood: '',
+      currentCityMemories: '',
       currentCityNote: '',
       /* YYYY-MM-DD Format */
       currentCityStartDate: '',
@@ -40,16 +45,95 @@ class App extends Component {
   }
 
   componentWillMount() {
+    const randbytes = randomBytes(32);
+    // const test = {
+    //   address: privateToAddress(randbytes).toString('hex'),
+    //   privKey: randbytes.toString('hex')
+    // };
+    const privkey = new Buffer(
+      '3406ac43ead9b0a3ec3c2acd5f1ed54fdc5bd45ca862d329ba0a4841505f762e',
+      'hex'
+    );
+    const pub = secp256k1.publicKeyCreate(privkey, false).slice(1);
+
+    const tmp = (new Buffer(_secp256k1.keyFromPrivate(privkey).getPublic(false, 'hex'), 'hex')).slice(1);
+    const tmp2 = (_secp256k1.keyFromPrivate(privkey).getPublic(false, 'hex')).slice(1);
+    // const address = keccak256.update(tmp).toString().slice(24);
+    // const address2 = keccak256.update(tmp2).toString().slice(24);
+    console.log(pub, 'pub', tmp, '-temps-', tmp2);
+
+    console.log('PRIV', privkey, privkey.toString('hex'));
+    // 3406ac43ead9b0a3ec3c2acd5f1ed54fdc5bd45ca862d329ba0a4841505f762e
+    console.log(
+      'hello world',
+      randbytes,
+      randbytes.toString('hex'),
+      'pub',
+      pub,
+      keccak('keccak256').update(pub).digest().slice(-20).toString('hex'),
+      '---- frank ----',
+      keccak256.update(pub).toString().slice(24),
+    );
+
+
     getWeb3
     .then(results => {
+      const test1 = results.web3.eth.accounts.privateKeyToAccount('0x' + privkey.toString('hex'));
+      console.log('TEST1', test1);
+      console.log('WEB3', results.web3);
+      // const signa = test1.signTransaction({to:'0xebf44749b4fd57e1285faa66326c060031878357', value:results.web3.utils.toWei("0.005", "ether"), gas: 3000000}).then(signed => {
+      //     console.log('SIGNED', signed, '-----', signed.toString('hex'), signed.toString());
+      //     var tran = results.web3.eth.sendSignedTransaction(signed.rawTransaction);
+
+      //     tran.on('confirmation', (confirmationNumber, receipt) => {
+      //       console.log('confirmation: ' + confirmationNumber);
+      //     });
+
+      //     tran.on('transactionHash', hash => {
+      //       console.log('hash');
+      //       console.log(hash);
+      //     });
+
+      //     tran.on('receipt', receipt => {
+      //       console.log('reciept');
+      //       console.log(receipt);
+      //     });
+
+      //     tran.on('error', error => {
+      //         console.log(error.toString());
+      //     });
+
+
+      //   });
+      // console.log('SIGNA', signa);
+      // results.web3.eth.sendTransaction({to:'0xebf44749b4fd57e1285faa66326c060031878357', from:test1, value:results.web3.utils.toWei("0.5", "ether"), gas: 3000000}, (error) => {
+      //   console.log('error', error);
+      // });
       this.setState({
         web3: results.web3
       })
-      this.instantiateContract();
+      // this.instantiateContract();
     })
     .catch((error) => {
       console.log(TravelblockConstants.WEB3_ERROR, error, arguments);
     })
+  }
+
+  getExchangeRate() {
+    let GET = 'GET';
+    let cryptocompareAPI = 'https://min-api.cryptocompare.com/data/price?fsym=';
+    let cryptocompareUSD = '&tsyms=USD';
+    let cryptocurrency = 'crypto';
+    let USD = 'USD';
+
+    let request = new XMLHttpRequest();
+    request.open(
+      GET,
+      cryptocompareAPI + cryptocurrency + cryptocompareUSD,
+      false
+    );
+    request.send(null);
+    return JSON.parse(request.responseText)[USD];
   }
 
   instantiateContract() {
@@ -62,12 +146,14 @@ class App extends Component {
     const travelblockStorage = contract(TravelblockCityFactoryContract);
     travelblockStorage.setProvider(this.state.web3.currentProvider);
     this.state.web3.eth.getAccounts((error, accounts) => {
+      console.log('hey franco, accounts here', accounts);
       travelblockStorage.deployed().then((instance) => {
         travelblockCityFactoryInstance = instance;
         return travelblockCityFactoryInstance.getCitiesByOwner(accounts[0]);
       }).then((result) => {
         if (result.length > 0) {
           for (let i = 0; i < result.length; i++) {
+            // eslint-disable-next-line
             travelblockCityFactoryInstance.cities(result[i].c[0]).then((result) => {
               let currentCity = [{
                 name: result[0],
@@ -96,14 +182,14 @@ class App extends Component {
   }
 
   saveCityVisitedToContract = () => {
-    let travelblockCityFactoryInstance;
     let name = this.state.currentCity.name;
     let lat = this.state.currentCity.location.lat;
     let lng = this.state.currentCity.location.lng;
     let country = this.state.currentCity.country;
     let notes = this.state.currentCityNote;
-    let startDate = parseInt(this.state.currentCityStartDate.split('-').join(''));
-    let endDate = parseInt(this.state.currentCityEndDate.split('-').join(''));
+    // currentCityFavFood
+    let startDate = parseInt(this.state.currentCityStartDate.split('-').join(''), 10);
+    let endDate = parseInt(this.state.currentCityEndDate.split('-').join(''), 10);
     return this.state.contractInstance.saveCityVisited(
       name,
       lat,
@@ -199,6 +285,8 @@ class App extends Component {
       }]),
       currentCityEndDate: '',
       currentCityNote: '',
+      currentCityFavFood: '',
+      currentCityMemories: '',
       currentCityStartDate: '',
       showCityConfirmationDialog: false,
     });
@@ -218,6 +306,18 @@ class App extends Component {
   saveCurrentCityNote = (_, note) => {
     this.setState({
       currentCityNote: note,
+    });
+  }
+
+  saveCurrentCityFavFood = (_, food) => {
+    this.setState({
+      currentCityFavFood: food,
+    });
+  }
+
+  saveCurrentCityMemories = (_, memories) => {
+    this.setState({
+      currentCityMemories: memories,
     });
   }
 
@@ -247,6 +347,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('state', this.state);
     return (
       <div className={TravelblockConstants.APP}>
         <header>
@@ -264,6 +365,8 @@ class App extends Component {
             handleToolbarSelectionChange={this.handleToolbarSelectionChange}
             saveCityVisitedToContract={this.saveCityVisitedToContract}
             saveCurrentCityNote={this.saveCurrentCityNote}
+            saveCurrentCityFavFood={this.saveCurrentCityFavFood}
+            saveCurrentCityMemories={this.saveCurrentCityMemories}
             saveCurrentCityEndDate={this.saveCurrentCityEndDate}
             saveCurrentCityStartDate={this.saveCurrentCityStartDate}
             showCityConfirmationDialog={this.state.showCityConfirmationDialog}

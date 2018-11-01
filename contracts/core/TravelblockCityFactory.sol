@@ -57,7 +57,16 @@ contract TravelblockCityFactory is Ownable {
     ) - 1;
     cityToOwner[id] = msg.sender;
     ownerCityCount[msg.sender] = ownerCityCount[msg.sender].add(1);
-    emit NewCity(id, _cityName, _lat, _lng, _country, _notes, _startDate, _endDate);
+    emit NewCity(
+      id,
+      _cityName,
+      _lat,
+      _lng,
+      _country,
+      _notes,
+      _startDate,
+      _endDate
+    );
   }
 
   function _generateRandomUint(string _str) private pure returns (uint) {
@@ -75,7 +84,15 @@ contract TravelblockCityFactory is Ownable {
     uint _startDate,
     uint _endDate
   ) public {
-    _createCity(_cityName, _lat, _lng, _country, _notes, _startDate, _endDate);
+    _createCity(
+      _cityName,
+      _lat,
+      _lng,
+      _country,
+      _notes,
+      _startDate,
+      _endDate
+    );
   }
 
   function getCitiesByOwner(address _owner) external view returns(uint[]) {
